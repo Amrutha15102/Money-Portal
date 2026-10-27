@@ -1136,3 +1136,21 @@ a {
 .banknote {
   color: #14633e;
 }
+/* Four decorative banknotes */
+.hero-notes .banknote {
+  color: #000000 !important;
+  border-color: #000000;
+  opacity: 0.25;
+}
+
+/* Floating background text */
+.money-background {
+  z-index: 0;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.money-background span {
+  color: #000000 !important;
+  opacity: 0.12;
+}
