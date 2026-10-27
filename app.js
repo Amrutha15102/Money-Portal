@@ -1222,6 +1222,7 @@ refreshMarketSummary();
 
     button.disabled = true;
     scenarioResult.textContent = "Loading exchange rates…";
+    document.querySelector("#scenario-inline").replaceChildren();
     rankingStatus.textContent = "Calculating ranking…";
     rankingList.replaceChildren();
     rankingChart.replaceChildren();
@@ -1305,7 +1306,24 @@ refreshMarketSummary();
         `Difference: ${money(difference, "USD")}. ` +
         "These are separate hypothetical exchanges, excluding fees.";
 
-      const ranking = currencies.map(code => ({
+      const inlineResult = document.querySelector("#scenario-inline");
+inlineResult.replaceChildren();
+
+[
+  [firstDate, startValue],
+  [lastDate, endValue]
+].forEach(([date, value]) => {
+  const column = document.createElement("div");
+  const dateLabel = document.createElement("small");
+  const amountLabel = document.createElement("strong");
+
+  dateLabel.textContent = date;
+  amountLabel.textContent = money(value, "USD");
+
+  column.append(dateLabel, amountLabel);
+  inlineResult.appendChild(column);
+});
+const ranking = currencies.map(code => ({
         code,
         change: 100 * (last[code] / first[code] - 1)
       })).sort((a, b) => b.change - a.change);

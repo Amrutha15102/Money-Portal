@@ -363,6 +363,7 @@
   </p>
 
   <label for="scenario-euros">Amount in euros</label>
+  <div class="scenario-input-row">
   <input
     id="scenario-euros"
     type="number"
@@ -372,11 +373,14 @@
     required
   >
 
+  <div id="scenario-inline" aria-live="polite"></div>
+</div>
   <button id="calculate-insights" type="button">
     Calculate exchange scenario and ranking
   </button>
 
   <p id="scenario-result" role="status"></p>
+
 </section>
 
 <section class="card">

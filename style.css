@@ -992,3 +992,39 @@ button.comparison-add {
 #ranking-chart .chart-legend span {
   color: #182238;
 }
+.scenario-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin: 8px 0 16px;
+}
+
+.scenario-input-row #scenario-euros {
+  width: 150px;
+  max-width: 100%;
+  margin: 0;
+}
+
+#scenario-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+#scenario-inline > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#scenario-inline small {
+  color: #d9e4de;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+#scenario-inline strong {
+  color: #83efb2;
+  font-size: 1.2rem;
+}
