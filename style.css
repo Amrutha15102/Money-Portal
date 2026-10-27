@@ -1056,3 +1056,83 @@ button {
   color: #10251c;
   font-weight: 600;
 }
+/* Light page and white sections */
+body {
+  background: #f1f4f7;
+  color: #182238;
+}
+
+.hero,
+.card,
+.comparison-card,
+.stat-card,
+.rate-summary > div {
+  background: #ffffff;
+  color: #182238;
+  border-color: #ccd5df;
+  box-shadow: 0 6px 20px rgba(24, 34, 56, 0.08);
+}
+
+/* Readable headings and text */
+h1, h2, h3, h4, h5, h6,
+p, label, li,
+.card p,
+.card label,
+.card span,
+.card h2,
+.card h3,
+.stat-card h3,
+.rate-summary h3,
+.rate-summary p,
+#scenario-inline small,
+#scenario-inline strong,
+#kpi-status {
+  color: #182238 !important;
+}
+
+/* Remove the pale gradient from the main heading */
+.hero h1 {
+  background: none;
+  color: #182238;
+  -webkit-text-fill-color: #182238;
+}
+
+.hero p,
+.stat-card p {
+  color: #14633e !important;
+}
+
+/* Dark green buttons with white text */
+button,
+.comparison-add {
+  background: #14633e;
+  color: #ffffff;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+/* Inputs and links */
+input,
+select {
+  background: #ffffff;
+  color: #182238;
+  border: 1px solid #8695a8;
+}
+
+a {
+  color: #1757a6;
+}
+
+/* Keep chart backgrounds white */
+#history-chart,
+#eur-chart,
+.comparison-plot,
+#ranking-chart {
+  background: #ffffff;
+}
+
+.banknote {
+  color: #14633e;
+}
