@@ -354,6 +354,53 @@
 </p>
 <div id="chart-board"></div>
 </section>
+<section class="card">
+  <h2>What if I exchanged my euros?</h2>
+
+  <p>
+    Uses the start and end dates selected in the Euro to US dollar
+    section. Compares two hypothetical exchanges.
+  </p>
+
+  <label for="scenario-euros">Amount in euros</label>
+  <input
+    id="scenario-euros"
+    type="number"
+    min="0.01"
+    step="0.01"
+    value="1000"
+    required
+  >
+
+  <button id="calculate-insights" type="button">
+    Calculate exchange scenario and ranking
+  </button>
+
+  <p id="scenario-result" role="status"></p>
+</section>
+
+<section class="card">
+  <h2>Currency movement ranking</h2>
+
+  <p>
+    Ranks the percentage change in USD, GBP and JPY units
+    received per euro over the selected period.
+    Positive means one euro buys more of that currency.
+  </p>
+
+  <p id="ranking-status" role="status">
+    Use the calculation button above to load the ranking.
+  </p>
+
+  <ol id="currency-ranking"></ol>
+  <div id="ranking-chart"></div>
+
+  <p>
+    Source: Frankfurter. Uses the first and last available
+    shared dates. These are exchange-rate changes, not
+    investment returns. Fees are excluded.
+  </p>
+</section>
 </main>
 </body>
 </html>

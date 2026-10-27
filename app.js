@@ -1172,3 +1172,184 @@ async function refreshMarketSummary() {
 
 refreshKpisButton.addEventListener("click", refreshMarketSummary);
 refreshMarketSummary();
+// Exchange scenario and currency movement ranking.
+(() => {
+  const button = document.querySelector("#calculate-insights");
+  const amountInput = document.querySelector("#scenario-euros");
+  const scenarioResult = document.querySelector("#scenario-result");
+  const rankingStatus = document.querySelector("#ranking-status");
+  const rankingList = document.querySelector("#currency-ranking");
+  const rankingChart = document.querySelector("#ranking-chart");
+
+  button.addEventListener("click", async () => {
+    const startInput = document.querySelector("#start-date");
+    const endInput = document.querySelector("#end-date");
+
+    if (
+      !startInput.reportValidity() ||
+      !endInput.reportValidity() ||
+      !amountInput.reportValidity()
+    ) {
+      return;
+    }
+
+    const start = startInput.value;
+    const end = endInput.value;
+    const amount = Number(amountInput.value);
+
+    if (start > end) {
+      scenarioResult.textContent =
+        "Start date must not follow end date.";
+      return;
+    }
+
+    const now = new Date();
+    const today =
+      `${now.getFullYear()}-` +
+      `${String(now.getMonth() + 1).padStart(2, "0")}-` +
+      `${String(now.getDate()).padStart(2, "0")}`;
+
+    if (end > today) {
+      scenarioResult.textContent =
+        "Choose an end date that is not in the future.";
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      scenarioResult.textContent = "Enter a valid positive amount.";
+      return;
+    }
+
+    button.disabled = true;
+    scenarioResult.textContent = "Loading exchange rates…";
+    rankingStatus.textContent = "Calculating ranking…";
+    rankingList.replaceChildren();
+    rankingChart.replaceChildren();
+
+    try {
+      const response = await fetch(
+        "https://api.frankfurter.dev/v2/rates" +
+        "?base=EUR&quotes=USD,GBP,JPY" +
+        `&from=${start}&to=${end}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid exchange-rate response.");
+      }
+
+      const currencies = ["USD", "GBP", "JPY"];
+      const byDate = new Map();
+
+      data.forEach(row => {
+        if (
+          !currencies.includes(row.quote) ||
+          !Number.isFinite(row.rate) ||
+          row.rate <= 0
+        ) {
+          return;
+        }
+
+        if (!byDate.has(row.date)) {
+          byDate.set(row.date, {});
+        }
+
+        byDate.get(row.date)[row.quote] = row.rate;
+      });
+
+      const dates = [...byDate.keys()]
+        .sort()
+        .filter(date =>
+          currencies.every(code =>
+            Number.isFinite(byDate.get(date)[code])
+          )
+        );
+
+      if (dates.length < 2) {
+        throw new Error(
+          "Choose a longer period with at least two shared observations."
+        );
+      }
+
+      const firstDate = dates[0];
+      const lastDate = dates[dates.length - 1];
+      const first = byDate.get(firstDate);
+      const last = byDate.get(lastDate);
+
+      const startValue = amount * first.USD;
+      const endValue = amount * last.USD;
+      const difference = endValue - startValue;
+
+      if (
+        !Number.isFinite(startValue) ||
+        !Number.isFinite(endValue)
+      ) {
+        throw new Error("The entered amount is too large.");
+      }
+
+      const money = (value, currency) =>
+        value.toLocaleString("en-US", {
+          style: "currency",
+          currency
+        });
+
+      scenarioResult.textContent =
+        `Exchanging ${money(amount, "EUR")} on ${firstDate} ` +
+        `would give ${money(startValue, "USD")}. ` +
+        `On ${lastDate}, it would give ${money(endValue, "USD")}. ` +
+        `Difference: ${money(difference, "USD")}. ` +
+        "These are separate hypothetical exchanges, excluding fees.";
+
+      const ranking = currencies.map(code => ({
+        code,
+        change: 100 * (last[code] / first[code] - 1)
+      })).sort((a, b) => b.change - a.change);
+
+      ranking.forEach(item => {
+        const entry = document.createElement("li");
+        const sign = item.change > 0 ? "+" : "";
+
+        entry.textContent =
+          `${item.code}: ${sign}${item.change.toFixed(2)}% ` +
+          "change in currency units per EUR.";
+
+        rankingList.appendChild(entry);
+      });
+
+      rankingStatus.textContent =
+        `${firstDate} to ${lastDate}. ` +
+        "Ordered from highest to lowest exchange-rate change.";
+
+      if (window.frappe) {
+        new frappe.Chart(rankingChart, {
+          title: "Change in currency units per EUR (%)",
+          data: {
+            labels: ranking.map(item => item.code),
+            datasets: [{
+              name: "Rate change (%)",
+              values: ranking.map(item => item.change)
+            }]
+          },
+          type: "bar",
+          height: 280,
+          colors: ["#16804a"]
+        });
+      } else {
+        rankingStatus.textContent +=
+          " Chart library unavailable; the ranking is shown above.";
+      }
+    } catch (error) {
+      scenarioResult.textContent = `Error: ${error.message}`;
+      rankingStatus.textContent =
+        "Could not calculate the ranking. Please try again.";
+      console.error(error);
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
