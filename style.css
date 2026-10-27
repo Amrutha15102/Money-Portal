@@ -1028,3 +1028,31 @@ button.comparison-add {
   color: #83efb2;
   font-size: 1.2rem;
 }
+/* Light page background */
+body {
+  background: #eef2f5;
+}
+
+/* Keep existing text readable inside dark sections */
+.hero,
+.card,
+.comparison-card,
+.stat-card {
+  background: #142b28;
+}
+
+/* Make text outside the dark cards readable */
+#kpi-status {
+  color: #243b35;
+}
+
+/* Keep decorative background text subtle */
+.money-background {
+  opacity: 0.06;
+}
+
+/* Strong contrast on green buttons */
+button {
+  color: #10251c;
+  font-weight: 600;
+}
