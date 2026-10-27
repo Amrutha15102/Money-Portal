@@ -1143,14 +1143,3 @@ a {
   opacity: 0.25;
 }
 
-/* Floating background text */
-.money-background {
-  z-index: 0;
-  opacity: 1;
-  pointer-events: none;
-}
-
-.money-background span {
-  color: #000000 !important;
-  opacity: 0.12;
-}
