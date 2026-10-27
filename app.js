@@ -35,6 +35,7 @@ loadButton.addEventListener("click", loadRate);
 const historyButton = document.querySelector("#load-history");
 const historyStatus = document.querySelector("#history-status");
 
+let historicalCsvRows = [];
 async function loadHistory() {
 const startInput = document.querySelector("#start-date");
 const endInput = document.querySelector("#end-date");
@@ -211,6 +212,13 @@ new frappe.Chart("#history-chart", {
 
     historyStatus.textContent =
       `Loaded ${rates.length} exchange-rate observations.`;
+      historicalCsvRows = sortedData.map(row => ({
+  date: row.date,
+  rate: row.rate
+}));
+
+document.querySelector("#download-csv").disabled = false;
+document.querySelector("#csv-status").textContent = "";
   } catch (error) {
     historyStatus.textContent = `Error: ${error.message}`;
     console.error(error);
@@ -1371,3 +1379,41 @@ const ranking = currencies.map(code => ({
     }
   });
 })();
+document.querySelector("#download-csv").addEventListener("click", () => {
+  const status = document.querySelector("#csv-status");
+
+  if (historicalCsvRows.length === 0) {
+    status.textContent = "Load historical rates first.";
+    return;
+  }
+
+  const lines = [
+    "Date,Base currency,Quote currency,Rate,Source",
+    ...historicalCsvRows.map(row =>
+      `${row.date},EUR,USD,${row.rate},Frankfurter`
+    )
+  ];
+
+  const blob = new Blob(
+    ["\uFEFF", lines.join("\r\n")],
+    { type: "text/csv;charset=utf-8" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  const firstDate = historicalCsvRows[0].date;
+  const lastDate = historicalCsvRows[historicalCsvRows.length - 1].date;
+
+  link.href = url;
+  link.download = `eur-usd-${firstDate}-to-${lastDate}.csv`;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+  status.textContent =
+    "CSV download requested for the last successfully loaded history.";
+});
