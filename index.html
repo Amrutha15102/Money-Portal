@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Money Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <script
+  src="https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.umd.js"
+  defer
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
+  defer
+></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<div class="money-background">
+  <span>BTC +5.4%</span>
+<span>ETH +2.8%</span>
+<span>DOGE +7.2%</span>
+<span>EUR/USD</span>
+<span>$109,500</span>
+  
+</div>
+
+<header class="hero">
+
+  <div class="market-lines"></div>
+  <div class="hero-notes" aria-hidden="true">
+  <span class="banknote note-euro">€</span>
+  <span class="banknote note-dollar">$</span>
+  <span class="banknote note-pound">£</span>
+  <span class="banknote note-yen">¥</span>
+</div>
+  <div class="hero-overlay">
+
+    <h1>
+      Crypto & Forex
+      Intelligence Portal
+    </h1>
+
+    <p>
+      Real-Time Exchange Analytics • Cryptocurrency Tracking • Investment Intelligence
+    </p>
+
+  </div>
+
+</header>
+<section class="stats" aria-label="Market summary">
+  <div class="stat-card">
+    <h3>Bitcoin</h3>
+    <p id="kpi-btc" role="status">Loading…</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Ethereum</h3>
+    <p id="kpi-eth" role="status">Loading…</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Dogecoin</h3>
+    <p id="kpi-doge" role="status">Loading…</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Fear &amp; Greed</h3>
+    <p id="kpi-sentiment" role="status">Loading…</p>
+  </div>
+</section>
+
+<div class="kpi-actions">
+  <button id="refresh-kpis" type="button">
+    Refresh market summary
+  </button>
+  <p id="kpi-status" role="status"></p>
+</div>
+
+<main>
+    <section class="card">
+  <h2>Euro to US dollar</h2>
+
+  <button id="load-rate" type="button">
+    Get exchange rate
+  </button>
+
+  <p id="result" role="status">
+    Click the button to load data.
+  </p>
+
+  <div class="date-controls">
+    <label>
+      Start date
+      <input
+        type="date"
+        id="start-date"
+        value="2026-08-01"
+        required
+      >
+    </label>
+
+    <label>
+      End date
+      <input
+        type="date"
+        id="end-date"
+        value="2026-08-30"
+        required
+      >
+    </label>
+  </div>
+
+  <div class="colour-controls">
+  <label for="line-color">Chart colour</label>
+  <input type="color" id="line-color" value="#334fcc">
+</div>
+
+<button id="load-history" type="button">
+  Load historical rates
+</button>
+
+  <p id="history-status" role="status"></p>
+
+  <div id="history-chart"></div>
+  <div id="rate-summary" class="rate-summary" hidden>
+  <div>
+    <h3>Lowest rate</h3>
+    <p id="rate-low"></p>
+  </div>
+
+  <div>
+    <h3>Highest rate</h3>
+    <p id="rate-high"></p>
+  </div>
+
+  <div>
+    <h3>Period change</h3>
+    <p id="rate-change"></p>
+  </div>
+</div>
+
+<p id="rate-summary-note" hidden>
+  Rates are USD per EUR. Change compares the first and last
+  available observations in your selected period.
+</p>
+  <p id="point-details" role="status">
+  Click a chart point to see its date and exchange rate.
+</p>
+  <button id="download-chart" type="button">
+  Download chart as SVG
+</button>
+<div class="share-controls">
+  <button id="prepare-image" type="button">
+    Prepare chart image
+  </button>
+
+  <button id="share-image" type="button" disabled>
+    Share image
+  </button>
+
+  <button id="download-png" type="button" disabled>
+    Download PNG
+  </button>
+</div>
+
+<p id="share-status" role="status"></p>
+
+<img
+  id="share-preview"
+  alt="Preview of the chart image prepared for sharing"
+  hidden
+>
+
+<p id="download-status" role="status"></p>
+
+  <p>
+    Source: Frankfurter. Values show US dollars per euro.
+  </p>
+</section>
+  
+ <section class="card">
+  <h2>Cryptocurrency prices</h2>
+
+  <label for="crypto-select">Choose cryptocurrency</label>
+
+  <select id="crypto-select">
+    <option value="BTC">Bitcoin</option>
+    <option value="ETH">Ethereum</option>
+    <option value="DOGE">Dogecoin</option>
+  </select>
+
+  <button id="load-crypto" type="button">
+    Get crypto price
+  </button>
+
+  <p id="crypto-result" role="status">
+    Choose a cryptocurrency and load its price.
+  </p>
+
+  <p>Source: Coinbase. Current spot price in US dollars.</p>
+</section>
+  <section class="card">
+  <h2>Crypto prices converted to euros</h2>
+
+  <p>Compare the current value of one coin in EUR.</p>
+
+  <button id="compare-eur" type="button">
+    Compare in euros
+  </button>
+
+  <p id="eur-status" role="status"></p>
+  <div id="eur-chart"></div>
+
+  <p>
+    Sources: Coinbase USD spot prices and Frankfurter EUR–USD rate.
+  </p>
+</section>
+<section class="card">
+  <h2>Bitcoin market sentiment</h2>
+
+  <p>
+    Fear & Greed Index: 0 represents extreme fear;
+    100 represents extreme greed.
+  </p>
+
+  <button id="load-sentiment" type="button">
+    Load market sentiment
+  </button>
+
+  <p id="sentiment-result" role="status">
+    Click to load the latest index.
+  </p>
+
+  <meter
+    id="sentiment-meter"
+    min="0"
+    max="100"
+    value="0"
+    hidden
+  ></meter>
+
+  <p>
+    Source:
+    <a href="https://alternative.me/crypto/fear-and-greed-index/">
+      Alternative.me Fear & Greed Index
+    </a>
+  </p>
+
+  <p>This indicator describes sentiment, not future price changes.</p>
+</section>
+<section class="card">
+  <h2>My crypto purchase</h2>
+
+  <div class="date-controls">
+    <label>
+      Cryptocurrency
+      <select id="purchase-coin">
+        <option value="BTC">Bitcoin</option>
+        <option value="ETH">Ethereum</option>
+        <option value="DOGE">Dogecoin</option>
+      </select>
+    </label>
+
+    <label>
+      Purchase date
+      <input type="date" id="purchase-date" required>
+    </label>
+
+    <label>
+      Number of coins bought
+      <input
+        type="number"
+        id="purchase-quantity"
+        min="0.00000001"
+        step="any"
+        required
+      >
+    </label>
+
+    <label>
+      Total paid in USD, including fees
+      <input
+        type="number"
+        id="purchase-cost"
+        min="0.01"
+        step="0.01"
+        required
+      >
+    </label>
+  </div>
+
+  <button id="calculate-purchase" type="button">
+    Calculate current value
+  </button>
+
+  <p id="purchase-result" role="status"></p>
+  <p id="purchase-suggestion"></p>
+
+  <p>
+    Classroom simulation: gains of at least 10% trigger “Sell”;
+    losses of at least 10% trigger “Buy more”; otherwise “Hold”.
+    These arbitrary rules do not predict returns or provide
+    investment advice.
+  </p>
+
+  <p>
+    Source: Coinbase spot price. Current value excludes selling fees
+    and assumes all purchased coins are still held.
+  </p>
+</section>
+<section class="card">
+  <h2>My comparison charts</h2>
+
+  <button id="add-chart" type="button">
+    Add chart
+  </button>
+
+  <p>
+  Drag a currency onto a chart to add it.
+  Comparison lines start at 100 on their first shared date.
+</p>
+
+<div id="currency-tray">
+  <div>
+    <span draggable="true" data-currency="USD">USD</span>
+    <label>
+      USD colour
+      <input id="USD-colour" type="color" value="#334fcc">
+    </label>
+  </div>
+
+  <div>
+    <span draggable="true" data-currency="GBP">GBP</span>
+    <label>
+      GBP colour
+      <input id="GBP-colour" type="color" value="#d97706">
+    </label>
+  </div>
+
+  <div>
+    <span draggable="true" data-currency="JPY">JPY</span>
+    <label>
+      JPY colour
+      <input id="JPY-colour" type="color" value="#16804a">
+    </label>
+  </div>
+</div>
+
+<p>
+  Choose colours, then drag a currency onto a chart.
+  Drop an existing currency again to apply updated colours.
+</p>
+<div id="chart-board"></div>
+</section>
+</main>
+</body>
+</html>
