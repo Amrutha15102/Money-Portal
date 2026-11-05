@@ -400,7 +400,7 @@ button:disabled {
   margin-top: 16px;
   border: 1px solid #dce2ed;
 }
-/* Keep padding and borders inside element widths. */
+
 *,
 *::before,
 *::after {
@@ -754,7 +754,7 @@ select {
   color: #ffffff;
 }
 
-/* Keep chart labels readable. */
+
 #history-chart,
 #eur-chart,
 .comparison-plot {
@@ -899,7 +899,7 @@ button.comparison-add {
   opacity: 0.22;
 }
 
-/* Inner border makes each symbol look like a banknote. */
+
 .banknote::before {
   content: "";
   position: absolute;
@@ -1033,7 +1033,7 @@ body {
   background: #eef2f5;
 }
 
-/* Keep existing text readable inside dark sections */
+
 .hero,
 .card,
 .comparison-card,
@@ -1041,22 +1041,22 @@ body {
   background: #142b28;
 }
 
-/* Make text outside the dark cards readable */
+
 #kpi-status {
   color: #243b35;
 }
 
-/* Keep decorative background text subtle */
+
 .money-background {
   opacity: 0.06;
 }
 
-/* Strong contrast on green buttons */
+
 button {
   color: #10251c;
   font-weight: 600;
 }
-/* Light page and white sections */
+
 body {
   background: #f1f4f7;
   color: #182238;
@@ -1090,7 +1090,7 @@ p, label, li,
   color: #182238 !important;
 }
 
-/* Remove the pale gradient from the main heading */
+
 .hero h1 {
   background: none;
   color: #182238;
@@ -1102,7 +1102,7 @@ p, label, li,
   color: #14633e !important;
 }
 
-/* Dark green buttons with white text */
+
 button,
 .comparison-add {
   background: #14633e;
@@ -1113,7 +1113,7 @@ button:disabled {
   opacity: 0.6;
 }
 
-/* Inputs and links */
+
 input,
 select {
   background: #ffffff;
@@ -1125,7 +1125,7 @@ a {
   color: #1757a6;
 }
 
-/* Keep chart backgrounds white */
+
 #history-chart,
 #eur-chart,
 .comparison-plot,
@@ -1136,7 +1136,7 @@ a {
 .banknote {
   color: #14633e;
 }
-/* Four decorative banknotes */
+
 .hero-notes .banknote {
   color: #000000 !important;
   border-color: #000000;
