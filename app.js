@@ -779,7 +779,7 @@ chartBoard.addEventListener("dragleave", event => {
   }
 });
 
-// Loading the original chart starts a new comparison.
+
 chartBoard.addEventListener("click", event => {
   if (event.target.closest(".comparison-load")) {
     const card = event.target.closest(".comparison-card");
@@ -787,7 +787,7 @@ chartBoard.addEventListener("click", event => {
   }
 }, true);
 
-// Both desktop dropping and mobile buttons use this function.
+
 async function addCurrencyToChart(card, addedCurrency) {
   if (!allowedCurrencies.includes(addedCurrency)) return;
 
